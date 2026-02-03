@@ -165,10 +165,6 @@ if (isset($_POST['simpan'])) {
                         <?php } ?>
                         </tbody>
                     </table>
-
-                    <a href="../dashboard.php" class="btn btn-secondary">
-                        Kembali ke Dashboard
-                    </a>
                 </div>
             </div>
 

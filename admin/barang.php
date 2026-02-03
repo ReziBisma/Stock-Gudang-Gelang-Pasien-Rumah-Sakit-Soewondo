@@ -114,10 +114,6 @@ if (isset($_GET['hapus'])) {
                 <?php } ?>
                 </tbody>
             </table>
-
-            <a href="../dashboard.php" class="btn btn-secondary mt-3">
-                Kembali ke Dashboard
-            </a>
         </div>
     </div>
 
