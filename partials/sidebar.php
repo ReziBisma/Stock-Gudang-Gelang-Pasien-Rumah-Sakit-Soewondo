@@ -57,7 +57,7 @@ $isOperator = isset($_SESSION['role']) && $_SESSION['role'] === 'operator';
         <small class="text-muted">Login sebagai</small><br>
         <strong><?= htmlspecialchars($_SESSION['username']); ?></strong>
         <div class="d-grid mt-2">
-            <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
+            <a href="<?= $base_url ?>/logout.php" class="btn btn-danger btn-sm">Logout</a>
         </div>
     </div>
 </div>
