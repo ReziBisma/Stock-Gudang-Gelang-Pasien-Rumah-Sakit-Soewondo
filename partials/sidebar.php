@@ -1,28 +1,12 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 $current_page = basename($_SERVER['PHP_SELF']);
-$current_path = $_SERVER['PHP_SELF'];
 
 $isAdmin    = ($_SESSION['role'] ?? '') === 'admin';
 $isOperator = ($_SESSION['role'] ?? '') === 'operator';
-
-/*
-|--------------------------------------------------------------------------
-| Tentukan prefix RELATIVE PATH
-|--------------------------------------------------------------------------
-| dashboard.php                  → ''
-| operator/stok.php / admin/*    → '../'
-*/
-$level = substr_count(trim($current_path, '/'), '/');
-$prefix = ($level > 1) ? '../' : '';
 ?>
 
-<div class="d-flex flex-column vh-100 bg-white shadow-sm"
-     style="width:260px; position:fixed;">
-
+<div class="d-flex flex-column vh-100 bg-white shadow-sm" style="width:260px; position:fixed;">
+    
     <!-- HEADER -->
     <div class="bg-primary text-white text-center py-4">
         <h5 class="fw-bold mb-0">SISTEM STOK</h5>
@@ -35,44 +19,41 @@ $prefix = ($level > 1) ? '../' : '';
 
             <!-- DASHBOARD -->
             <li class="nav-item">
-                <a href="<?= $prefix ?>dashboard.php"
-                   class="nav-link <?= ($current_page === 'dashboard.php') ? 'active' : '' ?>">
+                <a href="<?= $base_url ?>/dashboard.php"
+                   class="nav-link <?= ($current_page == 'dashboard.php') ? 'active' : '' ?>">
                     🏠 Dashboard
                 </a>
             </li>
 
-            <!-- STOK -->
+            <!-- STOK (ADMIN & OPERATOR) -->
             <?php if ($isAdmin || $isOperator): ?>
             <li class="nav-item">
-                <a href="<?= $prefix ?>operator/stok.php"
-                   class="nav-link <?= ($current_page === 'stok.php') ? 'active' : '' ?>">
+                <a href="<?= $base_url ?>/operator/stok.php"
+                   class="nav-link <?= ($current_page == 'stok.php') ? 'active' : '' ?>">
                     📦 Manajemen Stok
                 </a>
             </li>
             <?php endif; ?>
 
-            <!-- BARANG -->
+            <!-- BARANG (ADMIN ONLY) -->
             <?php if ($isAdmin): ?>
             <li class="nav-item">
-                <a href="<?= $prefix ?>admin/barang.php"
-                   class="nav-link <?= ($current_page === 'barang.php') ? 'active' : '' ?>">
+                <a href="<?= $base_url ?>/admin/barang.php"
+                   class="nav-link <?= ($current_page == 'barang.php') ? 'active' : '' ?>">
                     🧾 Data Barang
                 </a>
             </li>
-            <?php endif; ?>
 
+            <?php endif; ?>
         </ul>
     </div>
 
     <!-- FOOTER -->
     <div class="p-3 border-top text-center">
         <small class="text-muted">Login sebagai</small><br>
-        <strong><?= htmlspecialchars($_SESSION['username'] ?? '-'); ?></strong>
+        <strong><?= htmlspecialchars($_SESSION['username']); ?></strong>
         <div class="d-grid mt-2">
-            <a href="<?= $prefix ?>logout.php"
-               class="btn btn-danger btn-sm">
-                Logout
-            </a>
+            <a href="<?= $base_url ?>/logout.php" class="btn btn-danger btn-sm">Logout</a>
         </div>
     </div>
 </div>
