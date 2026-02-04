@@ -2,7 +2,6 @@
 session_start();
 
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/config.php';
 
 if (!isset($_SESSION['login'])) {
     header("Location: ../index.php");

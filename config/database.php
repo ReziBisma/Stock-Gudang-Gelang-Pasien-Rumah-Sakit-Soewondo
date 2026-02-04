@@ -1,8 +1,14 @@
 <?php
+$host = "localhost";  // Host XAMPP (default: localhost)
+$user = "root";       // Username database (default: root)
+$pass = "";           // Password database (kosong secara default)
+$db   = "stok_gelangrs";  // Nama database yang Anda buat
 
-$conn = mysqli_connect("localhost", "stokuser", "stok123", "stok_gelangrs");
+$conn = mysqli_connect($host, $user, $pass, $db);
 
 if (!$conn) {
-    die("Koneksi gagal: " . mysqli_connect_error());
+    die("Koneksi ke database gagal: " . mysqli_connect_error());
 }
+?>
+
 
