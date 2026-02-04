@@ -44,29 +44,32 @@ Sistem ini mendukung manajemen barang, pencatatan stok masuk & keluar, serta aut
 
 ## 📂 Struktur Folder
 
+```
 Stock-Gudang-Gelang-Pasien-Rumah-Sakit-Soewondo/
 │
 ├── admin/
 ├── operator/
 ├── auth/
-│ ├── login_process.php
-│ └── register_process.php
+│   ├── login_process.php
+│   └── register_process.php
 │
 ├── config/
-│ ├── database.php
-│ └── config.php
+│   ├── database.php
+│   └── config.php
 │
 ├── views/
-│ ├── login_view.php
-│ └── register_view.php
+│   ├── login_view.php
+│   └── register_view.php
 │
 ├── partials/
-│ └── sidebar.php
+│   └── sidebar.php
 │
 ├── dashboard.php
 ├── index.php
 ├── register.php
 └── stok_gelangrs.sql
+```
+
 
 ## ⚙️ Cara Instalasi
 
