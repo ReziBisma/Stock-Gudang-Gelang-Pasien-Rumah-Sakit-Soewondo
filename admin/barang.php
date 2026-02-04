@@ -1,10 +1,14 @@
 <?php
+session_start();
+
 require_once __DIR__ . '/../config/database.php';
-include __DIR__ . '/../partials/sidebar.php';
+require_once __DIR__ . '/../config/config.php';
 
 if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'admin') {
     die("Akses ditolak");
 }
+
+include __DIR__ . '/../partials/sidebar.php';
 
 if (isset($_POST['tambah'])) {
     $nama = mysqli_real_escape_string($conn, $_POST['nama']);
@@ -95,12 +99,14 @@ if (isset($_GET['hapus'])) {
                     </tr>
                 </thead>
                 <tbody>
+                    
                 <?php
-                $no = 1;
-                $data = mysqli_query($conn, "SELECT * FROM barang");
-                while ($d = mysqli_fetch_assoc($data)) {
+                    $no = 1;
+                    $data = mysqli_query($conn, "SELECT * FROM barang");
+                    while ($d = mysqli_fetch_assoc($data)) {
                 ?>
-                    <tr>
+
+                <tr>
                         <td class="text-center"><?= $no++; ?></td>
                         <td><?= htmlspecialchars($d['nama_barang']); ?></td>
                         <td class="text-center">
@@ -111,7 +117,7 @@ if (isset($_GET['hapus'])) {
                             </a>
                         </td>
                     </tr>
-                <?php } ?>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>

@@ -1,3 +1,3 @@
 <?php
-$base_url = "/Stock%20Gelang%20Rumah%20sakit";
+$base_url = "http://localhost:8000";
 ?>

@@ -1,12 +1,8 @@
 <?php
-require_once __DIR__ . '/../config/config.php';
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 $current_page = basename($_SERVER['PHP_SELF']);
-$isAdmin    = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
-$isOperator = isset($_SESSION['role']) && $_SESSION['role'] === 'operator';
+
+$isAdmin    = ($_SESSION['role'] ?? '') === 'admin';
+$isOperator = ($_SESSION['role'] ?? '') === 'operator';
 ?>
 
 <div class="d-flex flex-column vh-100 bg-white shadow-sm" style="width:260px; position:fixed;">
