@@ -7,16 +7,48 @@ if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'admin') {
     die("Akses ditolak");
 }
 
-include __DIR__ . '/../partials/sidebar.php';
+Include __DIR__ . '/../partials/sidebar.php';
 
+// Tambah barang
 if (isset($_POST['tambah'])) {
     $nama = mysqli_real_escape_string($conn, $_POST['nama']);
-    mysqli_query($conn, "INSERT INTO barang (nama_barang) VALUES ('$nama')");
+    if ($nama) {
+        mysqli_query($conn, "INSERT INTO barang (nama_barang) VALUES ('$nama')");
+        $tambah_success = "Barang '$nama' berhasil ditambahkan!";
+    }
 }
 
+// Hapus barang
 if (isset($_GET['hapus'])) {
     $id = (int) $_GET['hapus'];
     mysqli_query($conn, "DELETE FROM barang WHERE id='$id'");
+    $hapus_success = "Barang berhasil dihapus!";
+}
+
+// Import CSV
+$import_success = '';
+$import_error = '';
+if (isset($_POST['import'])) {
+    if (isset($_FILES['file']) && $_FILES['file']['tmp_name']) {
+        $file = $_FILES['file']['tmp_name'];
+        if (($handle = fopen($file, 'r')) !== FALSE) {
+            fgetcsv($handle); // skip header
+            $count = 0;
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $nama = mysqli_real_escape_string($conn, $data[1]);
+                if ($nama) {
+                    mysqli_query($conn, "INSERT INTO barang (nama_barang) VALUES ('$nama')");
+                    $count++;
+                }
+            }
+            fclose($handle);
+            $import_success = "Import CSV berhasil! $count barang ditambahkan.";
+        } else {
+            $import_error = "Gagal membaca file CSV.";
+        }
+    } else {
+        $import_error = "Tidak ada file yang dipilih.";
+    }
 }
 ?>
 
@@ -25,70 +57,64 @@ if (isset($_GET['hapus'])) {
 <head>
     <meta charset="UTF-8">
     <title>Kelola Barang</title>
-
     <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- ICON -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
     <style>
-        body {
-            overflow-x: hidden;
-        }
+        body { overflow-x: hidden; }
         .sidebar-fixed {
-            width: 250px;
-            min-height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background: #fff;
-            border-right: 1px solid #ddd;
+            width: 250px; min-height: 100vh; position: fixed;
+            top: 0; left: 0; background: #fff; border-right: 1px solid #ddd;
         }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-        }
+        .content { margin-left: 250px; padding: 20px; }
     </style>
 </head>
-
 <body class="bg-light">
-
-
-
-<!-- KONTEN -->
 <div class="content">
 
     <h3 class="mb-4">Kelola Data Barang</h3>
+
+    <!-- ALERT -->
+    <?php if(!empty($tambah_success)): ?>
+        <div class="alert alert-success"><?= $tambah_success; ?></div>
+    <?php endif; ?>
+    <?php if(!empty($hapus_success)): ?>
+        <div class="alert alert-success"><?= $hapus_success; ?></div>
+    <?php endif; ?>
+    <?php if(!empty($import_success)): ?>
+        <div class="alert alert-success"><?= $import_success; ?></div>
+    <?php endif; ?>
+    <?php if(!empty($import_error)): ?>
+        <div class="alert alert-danger"><?= $import_error; ?></div>
+    <?php endif; ?>
 
     <!-- CARD INPUT -->
     <div class="card shadow-sm mb-4">
         <div class="card-body">
             <h5 class="mb-3">Tambah Barang Baru</h5>
-
             <form method="post" class="row g-3">
                 <div class="col-md-10">
-                    <input type="text"
-                           name="nama"
-                           class="form-control"
-                           placeholder="Nama Barang (Gelang Rumah Sakit)"
-                           required>
+                    <input type="text" name="nama" class="form-control" placeholder="Nama Barang (Gelang Rumah Sakit)" required>
                 </div>
-
                 <div class="col-md-2 d-grid">
-                    <button type="submit" name="tambah" class="btn btn-success">
-                        Tambah
-                    </button>
+                    <button type="submit" name="tambah" class="btn btn-success">Tambah</button>
                 </div>
             </form>
         </div>
+    </div>
+
+    <!-- IMPORT & EXPORT -->
+    <div class="mb-4">
+        <!-- Tombol Export CSV -->
+        <a href="../auth/export_barang.php" class="btn btn-success me-2" target="_blank">Export CSV</a>
+
     </div>
 
     <!-- TABEL DATA -->
     <div class="card shadow-sm">
         <div class="card-body">
             <h5 class="mb-3">Daftar Barang</h5>
-
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                     <tr class="text-center">
@@ -98,31 +124,26 @@ if (isset($_GET['hapus'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    
-                <?php
+                    <?php
                     $no = 1;
-                    $data = mysqli_query($conn, "SELECT * FROM barang");
-                    while ($d = mysqli_fetch_assoc($data)) {
-                ?>
-
-                <tr>
+                    $data = mysqli_query($conn, "SELECT * FROM barang ORDER BY id ASC");
+                    while ($d = mysqli_fetch_assoc($data)):
+                    ?>
+                    <tr>
                         <td class="text-center"><?= $no++; ?></td>
                         <td><?= htmlspecialchars($d['nama_barang']); ?></td>
                         <td class="text-center">
-                            <a href="?hapus=<?= $d['id']; ?>"
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('Hapus barang ini?')">
-                               <i class="bi bi-trash"></i>
+                            <a href="?hapus=<?= $d['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Hapus barang ini?')">
+                                <i class="bi bi-trash"></i>
                             </a>
                         </td>
                     </tr>
-                    <?php } ?>
+                    <?php endwhile; ?>
                 </tbody>
             </table>
         </div>
     </div>
 
 </div>
-
 </body>
 </html>

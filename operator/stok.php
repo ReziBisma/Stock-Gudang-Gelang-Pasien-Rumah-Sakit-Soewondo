@@ -44,47 +44,25 @@ if (isset($_POST['simpan'])) {
 <head>
     <title>Input Stok Gelang</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <style>
-        /* sidebar tetap seperti gambar 2 */
-        .sidebar-wrapper {
-            width: 250px;
-            min-height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            background: #fff;
-            border-right: 1px solid #e5e5e5;
-        }
-
-        /* konten geser ke kanan */
-        .content-wrapper {
-            margin-left: 250px;
-            width: calc(100% - 250px);
-        }
+        .sidebar-wrapper { width: 250px; min-height: 100vh; position: fixed; left: 0; top: 0; background: #fff; border-right: 1px solid #e5e5e5; }
+        .content-wrapper { margin-left: 250px; width: calc(100% - 250px); }
     </style>
 </head>
-
 <body class="bg-light">
-
 <div class="d-flex">
-
-    <!-- SIDEBAR -->
     <div class="sidebar-wrapper">
         <?php include __DIR__ . '/../partials/sidebar.php'; ?>
     </div>
 
-    <!-- KONTEN -->
     <div class="content-wrapper">
         <div class="container mt-4">
 
             <h3 class="mb-4">Input Stok Gelang Rumah Sakit</h3>
 
-            <!-- ALERT -->
             <?php if (isset($error)): ?>
                 <div class="alert alert-danger"><?= $error; ?></div>
             <?php endif; ?>
-
             <?php if (isset($success)): ?>
                 <div class="alert alert-success"><?= $success; ?></div>
             <?php endif; ?>
@@ -93,7 +71,6 @@ if (isset($_POST['simpan'])) {
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <h5 class="mb-3">Tambah Transaksi Stok</h5>
-
                     <form method="post" class="row g-3">
                         <div class="col-md-4">
                             <label class="form-label">Barang</label>
@@ -118,19 +95,19 @@ if (isset($_POST['simpan'])) {
                         </div>
 
                         <div class="col-md-2 d-grid align-items-end">
-                            <button type="submit" name="simpan" class="btn btn-success mt-4">
-                                Simpan
-                            </button>
+                            <button type="submit" name="simpan" class="btn btn-success mt-4">Simpan</button>
                         </div>
                     </form>
                 </div>
             </div>
 
+            <!-- EXPORT RIWAYAT STOK -->
+            <a href="../auth/export_stok.php" class="btn btn-success mb-3">Export Riwayat Stok CSV</a>
+
             <!-- TABEL RIWAYAT -->
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="mb-3">Riwayat Stok</h5>
-
                     <table class="table table-bordered table-hover table-sm">
                         <thead class="table-light text-center">
                             <tr>
@@ -172,8 +149,6 @@ if (isset($_POST['simpan'])) {
 
         </div>
     </div>
-
 </div>
-
 </body>
 </html>
