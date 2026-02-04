@@ -19,7 +19,7 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
 
             <!-- DASHBOARD -->
             <li class="nav-item">
-                <a href="<?= $base_url ?>/dashboard.php"
+                <a href="/dashboard.php"
                    class="nav-link <?= ($current_page == 'dashboard.php') ? 'active' : '' ?>">
                     🏠 Dashboard
                 </a>
@@ -28,7 +28,7 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
             <!-- STOK (ADMIN & OPERATOR) -->
             <?php if ($isAdmin || $isOperator): ?>
             <li class="nav-item">
-                <a href="<?= $base_url ?>/operator/stok.php"
+                <a href="/operator/stok.php"
                    class="nav-link <?= ($current_page == 'stok.php') ? 'active' : '' ?>">
                     📦 Manajemen Stok
                 </a>
@@ -38,7 +38,7 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
             <!-- BARANG (ADMIN ONLY) -->
             <?php if ($isAdmin): ?>
             <li class="nav-item">
-                <a href="<?= $base_url ?>/admin/barang.php"
+                <a href="/admin/barang.php"
                    class="nav-link <?= ($current_page == 'barang.php') ? 'active' : '' ?>">
                     🧾 Data Barang
                 </a>
@@ -53,7 +53,7 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
         <small class="text-muted">Login sebagai</small><br>
         <strong><?= htmlspecialchars($_SESSION['username']); ?></strong>
         <div class="d-grid mt-2">
-            <a href="<?= $base_url ?>/logout.php" class="btn btn-danger btn-sm">Logout</a>
+            <a href="/logout.php" class="btn btn-danger btn-sm">Logout</a>
         </div>
     </div>
 </div>
