@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 // kalau sudah login, langsung dashboard
 if (isset($_SESSION['login'])) {
     header("Location: dashboard.php");
