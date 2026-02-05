@@ -79,6 +79,31 @@
     </div>
 
     <!-- ===================== -->
+    <!-- SEARCH -->
+    <!-- ===================== -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-2">
+
+                <div class="col-md-10">
+                    <input type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Cari nama barang..."
+                        value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                </div>
+
+                <div class="col-md-2 d-grid">
+                    <button class="btn btn-primary">
+                        <i class="bi bi-search"></i> Cari
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    
+    <!-- ===================== -->
     <!-- BULK DELETE -->
     <!-- ===================== -->
 
@@ -172,10 +197,10 @@
                             <!-- Previous -->
                             <?php if ($page > 1): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="?page=1">First</a>
+                                    <a class="page-link" href="?page=1&search=<?= urlencode($search); ?>">First</a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="?page=<?= $page - 1; ?>">Previous</a>
+                                    <a class="page-link" href="?page=<?= $page - 1; ?>&search=<?= urlencode($search); ?>">Previous</a>
                                 </li>
                             <?php else: ?>
                                 <li class="page-item disabled">
@@ -204,7 +229,7 @@
                                     </li>
                                 <?php else: ?>
                                     <li class="page-item">
-                                        <a class="page-link" href="?page=<?= $i; ?>"><?= $i; ?></a>
+                                        <a class="page-link" href="?page=<?= $i; ?>&search=<?= urlencode($search); ?>"><?= $i; ?></a>
                                     </li>
                                 <?php endif; ?>
                             <?php endfor; ?>
@@ -218,10 +243,10 @@
                             <!-- Next -->
                             <?php if ($page < $totalPage): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="?page=<?= $page + 1; ?>">Next</a>
+                                    <a class="page-link" href="?page=<?= $page + 1; ?>&search=<?= urlencode($search); ?>">Next</a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="?page=<?= $totalPage; ?>">Last</a>
+                                    <a class="page-link" href="?page=<?= $totalPage; ?>&search=<?= urlencode($search); ?>">Last</a>
                                 </li>
                             <?php else: ?>
                                 <li class="page-item disabled">

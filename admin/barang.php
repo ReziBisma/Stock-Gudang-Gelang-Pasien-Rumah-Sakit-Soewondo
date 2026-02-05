@@ -52,6 +52,17 @@ if (isset($_POST['hapus_massal']) && !empty($_POST['hapus_ids'])) {
     $hapus_success = "Data terpilih berhasil dihapus!";
 }
 
+/* =====================
+   SEARCH
+===================== */
+$search = '';
+$where  = '';
+
+if (isset($_GET['search']) && $_GET['search'] !== '') {
+    $search = mysqli_real_escape_string($conn, $_GET['search']);
+    $where  = "WHERE nama_barang LIKE '%$search%'";
+}
+
 
 /* PAGINATION */
 $limit = 10;
@@ -60,7 +71,7 @@ $page  = ($page < 1) ? 1 : $page;
 
 $offset = ($page - 1) * $limit;
 
-$totalQuery = mysqli_query($conn, "SELECT COUNT(*) AS total FROM barang");
+$totalQuery = mysqli_query($conn, "SELECT COUNT(*) AS total FROM barang $where");
 $totalRow   = mysqli_fetch_assoc($totalQuery);
 $totalData  = $totalRow['total'];
 $totalPage  = ceil($totalData / $limit);
@@ -73,9 +84,11 @@ if ($page > $totalPage && $totalPage > 0) {
 $data = mysqli_query(
     $conn,
     "SELECT * FROM barang
+     $where
      ORDER BY id ASC
      LIMIT $limit OFFSET $offset"
 );
+
 
 $params = '';
 
