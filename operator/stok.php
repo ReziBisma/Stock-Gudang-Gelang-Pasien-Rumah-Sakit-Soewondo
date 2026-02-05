@@ -46,7 +46,7 @@ if (isset($_POST['simpan'])) {
 ============================== */
 if (isset($_GET['hapus'])) {
 
-    if ($_SESSION['role'] !== 'admin') {
+    if (!in_array($_SESSION['role'], ['admin', 'operator'])) {
         die("Akses ditolak");
     }
 

@@ -115,7 +115,7 @@
                         <td><?= $d['keluar'] ?></td>
                         <td><strong><?= $d['stok_akhir'] ?></strong></td>
                         <td>
-                            <?php if ($_SESSION['role'] === 'admin'): ?>
+                            <?php if (in_array($_SESSION['role'], ['admin', 'operator'])): ?>
                                 <a href="?hapus=<?= $d['id'] ?>&page=<?= $page ?><?= $params ?>"
                                 class="btn btn-danger btn-sm"
                                 onclick="return confirm('Yakin ingin menghapus data ini?')">
