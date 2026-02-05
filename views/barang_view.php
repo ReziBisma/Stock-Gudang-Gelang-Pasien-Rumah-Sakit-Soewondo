@@ -52,7 +52,7 @@
         </a>
     </div>
 
-    <!-- TABEL DATA -->
+    <!-- TABEL -->
     <div class="card shadow-sm">
         <div class="card-body">
 
@@ -67,21 +67,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                <?php $no = 1; while ($d = mysqli_fetch_assoc($data)): ?>
+
+                <?php
+                $no = $offset + 1;
+                while ($d = mysqli_fetch_assoc($data)):
+                ?>
                     <tr>
                         <td class="text-center"><?= $no++; ?></td>
                         <td><?= htmlspecialchars($d['nama_barang']); ?></td>
                         <td class="text-center">
 
-                            <!-- EDIT -->
                             <button class="btn btn-warning btn-sm"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editModal<?= $d['id']; ?>">
                                 <i class="bi bi-pencil"></i>
                             </button>
 
-                            <!-- HAPUS -->
-                            <a href="?hapus=<?= $d['id']; ?>"
+                            <a href="?hapus=<?= $d['id']; ?>&page=<?= $page; ?>"
                                class="btn btn-danger btn-sm"
                                onclick="return confirm('Hapus barang ini?')">
                                 <i class="bi bi-trash"></i>
@@ -100,19 +102,13 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <input type="text"
-                                               name="nama"
+                                        <input type="text" name="nama"
                                                class="form-control"
-                                               value="<?= htmlspecialchars($d['nama_barang']); ?>"
-                                               required>
+                                               value="<?= htmlspecialchars($d['nama_barang']); ?>" required>
                                     </div>
                                     <div class="modal-footer">
-                                        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
-                                            Batal
-                                        </button>
-                                        <button name="update" class="btn btn-primary btn-sm">
-                                            Simpan
-                                        </button>
+                                        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                                        <button name="update" class="btn btn-primary btn-sm">Simpan</button>
                                     </div>
                                 </form>
                             </div>
@@ -122,6 +118,32 @@
                 <?php endwhile; ?>
                 </tbody>
             </table>
+
+            <!-- PAGINATION -->
+            <?php if ($totalPage > 1): ?>
+            <hr>
+            <nav class="d-flex justify-content-center">
+                <ul class="pagination">
+
+                    <li class="page-item <?= ($page <= 1) ? 'disabled' : ''; ?>">
+                        <a class="page-link" href="?page=<?= $page - 1; ?>">&laquo;</a>
+                    </li>
+
+                    <?php for ($i = 1; $i <= $totalPage; $i++): ?>
+                        <li class="page-item <?= ($i == $page) ? 'active' : ''; ?>">
+                            <a class="page-link" href="?page=<?= $i; ?>">
+                                <?= $i; ?>
+                            </a>
+                        </li>
+                    <?php endfor; ?>
+
+                    <li class="page-item <?= ($page >= $totalPage) ? 'disabled' : ''; ?>">
+                        <a class="page-link" href="?page=<?= $page + 1; ?>">&raquo;</a>
+                    </li>
+
+                </ul>
+            </nav>
+            <?php endif; ?>
 
         </div>
     </div>

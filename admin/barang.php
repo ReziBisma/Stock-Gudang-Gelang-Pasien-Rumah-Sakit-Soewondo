@@ -42,9 +42,24 @@ if (isset($_GET['hapus'])) {
 }
 
 /* =====================
-   AMBIL DATA BARANG
+   PAGINATION
 ===================== */
-$data = mysqli_query($conn, "SELECT * FROM barang ORDER BY id ASC");
+$limit = 10;
+$page  = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$page  = ($page < 1) ? 1 : $page;
+$offset = ($page - 1) * $limit;
+
+/* total data */
+$totalQuery = mysqli_query($conn, "SELECT COUNT(*) AS total FROM barang");
+$totalRow   = mysqli_fetch_assoc($totalQuery);
+$totalData  = $totalRow['total'];
+$totalPage  = ceil($totalData / $limit);
+
+/* data per halaman */
+$data = mysqli_query(
+    $conn,
+    "SELECT * FROM barang ORDER BY id ASC LIMIT $limit OFFSET $offset"
+);
 
 /* =====================
    LOAD VIEW
