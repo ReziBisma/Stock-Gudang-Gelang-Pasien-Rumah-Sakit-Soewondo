@@ -42,7 +42,7 @@ if (isset($_GET['hapus'])) {
 }
 
 /* ===== BULK DELETE ===== */
-if (isset($_POST['bulk_delete']) && !empty($_POST['hapus_ids'])) {
+if (isset($_POST['hapus_massal']) && !empty($_POST['hapus_ids'])) {
 
     $ids = array_map('intval', $_POST['hapus_ids']);
     $idList = implode(',', $ids);
@@ -53,25 +53,31 @@ if (isset($_POST['bulk_delete']) && !empty($_POST['hapus_ids'])) {
 }
 
 
-/* =====================
-   PAGINATION
-===================== */
+/* PAGINATION */
 $limit = 10;
 $page  = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $page  = ($page < 1) ? 1 : $page;
+
 $offset = ($page - 1) * $limit;
 
-/* total data */
 $totalQuery = mysqli_query($conn, "SELECT COUNT(*) AS total FROM barang");
 $totalRow   = mysqli_fetch_assoc($totalQuery);
 $totalData  = $totalRow['total'];
 $totalPage  = ceil($totalData / $limit);
 
-/* data per halaman */
+if ($page > $totalPage && $totalPage > 0) {
+    $page = $totalPage;
+    $offset = ($page - 1) * $limit;
+}
+
 $data = mysqli_query(
     $conn,
-    "SELECT * FROM barang ORDER BY id ASC LIMIT $limit OFFSET $offset"
+    "SELECT * FROM barang
+     ORDER BY id ASC
+     LIMIT $limit OFFSET $offset"
 );
+
+$params = '';
 
 /* =====================
    LOAD VIEW
