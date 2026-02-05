@@ -41,6 +41,18 @@ if (isset($_GET['hapus'])) {
     $hapus_success = "Barang berhasil dihapus!";
 }
 
+/* ===== BULK DELETE ===== */
+if (isset($_POST['bulk_delete']) && !empty($_POST['hapus_ids'])) {
+
+    $ids = array_map('intval', $_POST['hapus_ids']);
+    $idList = implode(',', $ids);
+
+    mysqli_query($conn, "DELETE FROM barang WHERE id IN ($idList)");
+
+    $hapus_success = "Data terpilih berhasil dihapus!";
+}
+
+
 /* =====================
    PAGINATION
 ===================== */
