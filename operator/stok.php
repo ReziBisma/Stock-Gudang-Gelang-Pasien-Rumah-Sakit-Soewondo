@@ -42,6 +42,24 @@ if (isset($_POST['simpan'])) {
 }
 
 /* ==============================
+   HAPUS STOK (TANPA RECALCULATE)
+============================== */
+if (isset($_GET['hapus'])) {
+
+    if ($_SESSION['role'] !== 'admin') {
+        die("Akses ditolak");
+    }
+
+    $id = (int) $_GET['hapus'];
+
+    mysqli_query($conn, "DELETE FROM stok WHERE id = $id");
+
+    header("Location: stok.php");
+    exit;
+}
+
+
+/* ==============================
    FILTER TANGGAL
 ============================== */
 $where = "";
@@ -182,6 +200,7 @@ $data = mysqli_query($conn, "
                         <th>Masuk</th>
                         <th>Keluar</th>
                         <th>Akhir</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -197,12 +216,22 @@ $data = mysqli_query($conn, "
                         <td><?= $d['masuk'] ?></td>
                         <td><?= $d['keluar'] ?></td>
                         <td><strong><?= $d['stok_akhir'] ?></strong></td>
+                        <td>
+                            <?php if ($_SESSION['role'] === 'admin'): ?>
+                                <a href="?hapus=<?= $d['id'] ?>&page=<?= $page ?><?= $params ?>"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Yakin ingin menghapus data ini?')">
+                                Hapus
+                                </a>
+                            <?php endif; ?>
+                        </td>
+
                     </tr>
                 <?php endwhile; ?>
 
                 <?php if ($totalData == 0): ?>
                     <tr>
-                        <td colspan="7" class="text-center text-muted">
+                        <td colspan="8" class="text-center text-muted">
                             Tidak ada data
                         </td>
                     </tr>
