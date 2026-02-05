@@ -52,7 +52,7 @@
                     </form>
 
                         <div class="text-center mt-3">
-                            <a href="register.php">Belum punya akun? Register</a>
+                            <a href="../controller/register.php">Belum punya akun? Register</a>
                         </div>
                 </div>
             </div>

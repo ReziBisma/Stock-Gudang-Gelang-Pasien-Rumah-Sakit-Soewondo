@@ -7,7 +7,7 @@ if (isset($_SESSION['login'])) {
 }
 
 // logic register
-require_once __DIR__ . '/auth/register_process.php';
+require_once __DIR__ . '/../auth/register_process.php';
 
 // view
-require_once __DIR__ . '/views/register_view.php';
+require_once __DIR__ . '/../views/register_view.php';
