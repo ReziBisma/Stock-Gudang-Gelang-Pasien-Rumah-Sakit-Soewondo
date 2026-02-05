@@ -74,6 +74,14 @@
         </div>
     </div>
 
+    <!-- EXPORT -->
+    <div class="mb-4">
+        <a href="../auth/export_stok.php" class="btn btn-success" target="_blank">
+            Export CSV
+        </a>
+    </div>
+
+
     <!-- TABEL -->
     <div class="card shadow-sm">
         <div class="card-body">
