@@ -53,29 +53,42 @@ $host = "db"
 ## 📂 Struktur Folder
 
 ```
-Stock-Gudang-Gelang-Pasien-Rumah-Sakit-Soewondo/
-│
-├── admin/
-├── operator/
-├── auth/
-│   ├── login_process.php
-│   └── register_process.php
-│
-├── config/
-│   ├── database.php
-│   └── config.php
-│
-├── views/
-│   ├── login_view.php
-│   └── register_view.php
-│
-├── partials/
-│   └── sidebar.php
-│
-├── dashboard.php
-├── index.php
-├── register.php
-└── stok_gelangrs.sql
+Stock-Gudang-Gelang-Pasien-Rumah-Sakit-Soewondo
+    ├── admin
+    │   ├── barang.php
+    │   └── users.php
+    ├── auth
+    │   ├── export_barang.php
+    │   ├── export_stok.php
+    │   ├── login_process.php
+    │   └── register_process.php
+    ├── config
+    │   ├── put your database.php here 
+    │   └── proses_transaksi.php
+    ├── controller
+    │   └── register.php
+    ├── dashboard.php
+    ├── docker (if use docker)
+    │   └── mysql-init
+    │       └── put your dump database here
+    ├── docker-compose.yml
+    ├── Dockerfile
+    ├── index.php
+    ├── logout.php
+    ├── operator
+    │   └── stok.php
+    ├── partials
+    │   └── sidebar.php
+    ├── README.MD
+    └── views
+        ├── barang_view.php
+        ├── dashboard_view.php
+        ├── login_view.php
+        ├── register_view.php
+        ├── stok_view.php
+        └── users_view.php
+
+
 ```
 
 
