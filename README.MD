@@ -5,6 +5,14 @@ Sistem ini mendukung manajemen barang, pencatatan stok masuk & keluar, serta aut
 
 ---
 
+## Note:
+bila memakai php -s localhost:xxxx, mohon di bagian /config/database.php hostnya buat menjadi seperti ini
+$host = "127.0.0.1"
+
+bila memakai docker-compose, hostnya buat menjadi seperti ini:
+$host = "db"
+
+
 ## 🚀 Fitur Utama
 
 - 🔐 Login & Register User
