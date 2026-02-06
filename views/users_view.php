@@ -23,7 +23,9 @@
 <div class="alert alert-success"><?= $$msg ?></div>
 <?php endif; endforeach; ?>
 
+<!-- ===================== -->
 <!-- TAMBAH USER -->
+<!-- ===================== -->
 <div class="card mb-4 shadow-sm">
 <div class="card-body">
 
@@ -53,39 +55,68 @@
 </div>
 </div>
 
+<!-- ===================== -->
 <!-- SEARCH -->
+<!-- ===================== -->
 <form class="mb-3">
-<input name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Cari user..." class="form-control">
+<input name="search"
+value="<?= htmlspecialchars($search) ?>"
+placeholder="Cari user..."
+class="form-control">
 </form>
 
+<!-- ===================== -->
+<!-- TABEL USER -->
+<!-- ===================== -->
 <form method="post" onsubmit="return confirm('Hapus user terpilih?')">
 
 <div class="card shadow-sm">
 <div class="card-body">
 
-<table class="table table-bordered">
+<table class="table table-bordered table-hover">
 
-<thead>
-<tr>
+<thead class="table-light">
+<tr class="text-center">
 <th width="40"><input type="checkbox" id="checkAll"></th>
-<th>ID</th>
+<th width="60">No</th>
 <th>Username</th>
-<th>Role</th>
-<th>Aksi</th>
+<th width="120">Role</th>
+<th width="150">Aksi</th>
 </tr>
 </thead>
 
 <tbody>
 
-<?php $rows=[]; while($u=mysqli_fetch_assoc($data)): $rows[]=$u; ?>
+<?php
+
+$rows = [];
+
+while ($u = mysqli_fetch_assoc($data)):
+
+$rows[] = $u;
+
+?>
 
 <tr>
-<td><input type="checkbox" name="hapus_ids[]" value="<?= $u['id'] ?>" class="row-check"></td>
-<td><?= $u['id'] ?></td>
-<td><?= htmlspecialchars($u['username']) ?></td>
-<td><?= $u['role'] ?></td>
 
-<td>
+<td class="text-center">
+<input type="checkbox"
+name="hapus_ids[]"
+value="<?= $u['id'] ?>"
+class="row-check">
+</td>
+
+<td class="text-center"><?= $no++; ?></td>
+
+<td><?= htmlspecialchars($u['username']) ?></td>
+
+<td class="text-center">
+<span class="badge bg-<?= $u['role']=='admin'?'danger':'secondary' ?>">
+<?= $u['role'] ?>
+</span>
+</td>
+
+<td class="text-center">
 
 <button class="btn btn-warning btn-sm"
 type="button"
@@ -101,6 +132,7 @@ onclick="return confirm('Hapus user?')">
 </a>
 
 </td>
+
 </tr>
 
 <?php endwhile; ?>
@@ -109,29 +141,46 @@ onclick="return confirm('Hapus user?')">
 </table>
 
 <button name="hapus_massal" class="btn btn-danger btn-sm">
-Hapus Terpilih
+<i class="bi bi-trash"></i> Hapus Terpilih
 </button>
 
 </div>
 </div>
 </form>
 
+<!-- ===================== -->
 <!-- PAGINATION -->
-<?php if ($totalPage>1): ?>
+<!-- ===================== -->
+<?php if ($totalPage > 1): ?>
 <nav class="mt-3">
 <ul class="pagination justify-content-center">
+
 <?php for($i=1;$i<=$totalPage;$i++): ?>
+
 <li class="page-item <?= $i==$page?'active':'' ?>">
-<a class="page-link" href="?page=<?= $i ?>&search=<?= urlencode($search) ?>">
+<a class="page-link"
+href="?page=<?= $i ?>&search=<?= urlencode($search) ?>">
 <?= $i ?>
 </a>
 </li>
+
 <?php endfor; ?>
+
 </ul>
 </nav>
+
+<div class="text-center mt-2">
+<small class="text-muted">
+Halaman <?= $page ?> dari <?= $totalPage ?> —
+Total user: <?= $totalData ?>
+</small>
+</div>
+
 <?php endif; ?>
 
+<!-- ===================== -->
 <!-- MODAL EDIT -->
+<!-- ===================== -->
 <?php foreach($rows as $u): ?>
 
 <div class="modal fade" id="edit<?= $u['id'] ?>">
@@ -160,8 +209,8 @@ class="form-control mb-2"
 placeholder="Kosongkan jika tidak diubah">
 
 <select name="role" class="form-control">
-<option <?= $u['role']=='admin'?'selected':'' ?>>admin</option>
-<option <?= $u['role']=='operator'?'selected':'' ?>>operator</option>
+<option value="admin" <?= $u['role']=='admin'?'selected':'' ?>>admin</option>
+<option value="operator" <?= $u['role']=='operator'?'selected':'' ?>>operator</option>
 </select>
 
 </div>
@@ -180,11 +229,15 @@ placeholder="Kosongkan jika tidak diubah">
 
 </div>
 
+<!-- ===================== -->
+<!-- SCRIPT -->
+<!-- ===================== -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-document.getElementById("checkAll").onclick=()=>{
-document.querySelectorAll(".row-check").forEach(cb=>cb.checked=checkAll.checked)
+document.getElementById("checkAll").onclick = function(){
+document.querySelectorAll(".row-check")
+.forEach(cb => cb.checked = this.checked);
 }
 </script>
 

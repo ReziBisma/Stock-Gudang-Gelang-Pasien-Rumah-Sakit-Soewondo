@@ -21,13 +21,16 @@ if (isset($_POST['tambah'])) {
 
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        mysqli_query($conn,
+        $stmt = mysqli_prepare($conn,
             "INSERT INTO users (username, password, role)
-             VALUES ('$username', '$hash', '$role')"
+            VALUES (?, ?, ?)"
         );
 
+        mysqli_stmt_bind_param($stmt, "sss", $username, $hash, $role);
+        mysqli_stmt_execute($stmt);
+
         $tambah_success = "User berhasil ditambahkan!";
-    }
+}
 }
 
 /* =====================
@@ -36,31 +39,37 @@ if (isset($_POST['tambah'])) {
 if (isset($_POST['update'])) {
 
     $id       = (int) $_POST['id'];
-    $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $role     = mysqli_real_escape_string($conn, $_POST['role']);
+    $username = $_POST['username'];
+    $role     = $_POST['role'];
 
     if (!empty($_POST['password'])) {
+
         $hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-        mysqli_query($conn,
-            "UPDATE users
-             SET username='$username',
-                 password='$hash',
-                 role='$role'
-             WHERE id='$id'"
+        $stmt = mysqli_prepare($conn,
+            "UPDATE users 
+             SET username=?, password=?, role=? 
+             WHERE id=?"
         );
+
+        mysqli_stmt_bind_param($stmt, "sssi", $username, $hash, $role, $id);
+        mysqli_stmt_execute($stmt);
+
     } else {
 
-        mysqli_query($conn,
-            "UPDATE users
-             SET username='$username',
-                 role='$role'
-             WHERE id='$id'"
+        $stmt = mysqli_prepare($conn,
+            "UPDATE users 
+             SET username=?, role=? 
+             WHERE id=?"
         );
+
+        mysqli_stmt_bind_param($stmt, "ssi", $username, $role, $id);
+        mysqli_stmt_execute($stmt);
     }
 
     $update_success = "User berhasil diperbarui!";
 }
+
 
 /* =====================
    HAPUS USER
