@@ -1,2 +1,5 @@
 config/database.php
 config/proses_transaksi.php
+.env
+docker/mysql-init/stok_gelangrs.sql
+.DS_Store
