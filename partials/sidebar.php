@@ -44,6 +44,13 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a href="/admin/users.php"
+                   class="nav-link <?= ($current_page == 'users.php') ? 'active' : '' ?>">
+                    👤 Data User
+                </a>
+            </li>
+
             <?php endif; ?>
         </ul>
     </div>
