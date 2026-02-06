@@ -88,13 +88,11 @@ class="form-control">
 <tbody>
 
 <?php
-
 $rows = [];
+$no = ($page - 1) * $limit + 1;
 
 while ($u = mysqli_fetch_assoc($data)):
-
 $rows[] = $u;
-
 ?>
 
 <tr>

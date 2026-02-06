@@ -5,10 +5,25 @@ $isAdmin    = ($_SESSION['role'] ?? '') === 'admin';
 $isOperator = ($_SESSION['role'] ?? '') === 'operator';
 ?>
 
+<style>
+/* warna aktif menu jadi hijau */
+.nav-pills .nav-link.active {
+    background-color: #198754 !important;
+}
+
+.nav-link {
+    color: #198754;
+}
+
+.nav-link:hover {
+    background-color: #d1e7dd;
+}
+</style>
+
 <div class="d-flex flex-column vh-100 bg-white shadow-sm" style="width:260px; position:fixed;">
     
     <!-- HEADER -->
-    <div class="bg-primary text-white text-center py-4">
+    <div class="bg-success text-white text-center py-4">
         <h5 class="fw-bold mb-0">SISTEM STOK</h5>
         <small>Rumah Sakit</small>
     </div>
@@ -25,7 +40,7 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
                 </a>
             </li>
 
-            <!-- STOK (ADMIN & OPERATOR) -->
+            <!-- STOK -->
             <?php if ($isAdmin || $isOperator): ?>
             <li class="nav-item">
                 <a href="/operator/stok.php"
@@ -35,7 +50,7 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
             </li>
             <?php endif; ?>
 
-            <!-- BARANG (ADMIN ONLY) -->
+            <!-- ADMIN MENU -->
             <?php if ($isAdmin): ?>
             <li class="nav-item">
                 <a href="/admin/barang.php"
@@ -50,8 +65,8 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
                     👤 Data User
                 </a>
             </li>
-
             <?php endif; ?>
+
         </ul>
     </div>
 
@@ -60,7 +75,7 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
         <small class="text-muted">Login sebagai</small><br>
         <strong><?= htmlspecialchars($_SESSION['username']); ?></strong>
         <div class="d-grid mt-2">
-            <a href="/logout.php" class="btn btn-danger btn-sm">Logout</a>
+            <a href="/logout.php" class="btn btn-success btn-sm">Logout</a>
         </div>
     </div>
 </div>
