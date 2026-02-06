@@ -85,7 +85,8 @@ Stock-Gudang-Gelang-Pasien-Rumah-Sakit-Soewondo/
 ```bash
 git clone https://github.com/USERNAME/Stock-Gudang-Gelang-Pasien-Rumah-Sakit-Soewondo.git
 cd Stock-Gudang-Gelang-Pasien-Rumah-Sakit-Soewondo
-sudo docker-compose up -d --build
+php -S localhost:xxxx 
+sudo docker-compose up -d --build (for docker)
 
 
 ## 👨‍💻 Author
