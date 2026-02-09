@@ -70,13 +70,14 @@
     <!-- EXPORT -->
     <!-- ===================== -->
 
-    <div class="mb-4">
-        <a href="../auth/export_barang.php"
-           class="btn btn-success"
-           target="_blank">
-            Export CSV
+    <div class="mb-4 d-flex gap-2">
+        <a href="../auth/export_barang.php?format=pdf"
+            class="btn btn-danger"
+            target="_blank">
+            Export PDF
         </a>
     </div>
+
 
     <!-- ===================== -->
     <!-- SEARCH -->
