@@ -16,9 +16,10 @@
             <div class="card shadow-sm">
                 <div class="card-body">
 
-                    <h4 class="text-center mb-3 fw-bold">
+                    <h4 class="text-center mb-3 fw-bold text-success">
                         Login Staff RS
                     </h4>
+
                     <p class="text-center text-muted mb-4">
                         Sistem Manajemen Stok Gelang
                     </p>
@@ -30,30 +31,29 @@
                     <?php endif; ?>
 
                     <form method="post" action="">
-                        <div class="mb-3">
-                            <label class="form-label">Username</label>
-                            <input type="text" name="username"
-                                   class="form-control"
-                                   required>
-                        </div>
+                        <input type="text"
+                               name="username"
+                               class="form-control mb-2"
+                               placeholder="Username"
+                               required>
 
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" name="password"
-                                   class="form-control"
-                                   required>
-                        </div>
+                        <input type="password"
+                               name="password"
+                               class="form-control mb-3"
+                               placeholder="Password"
+                               required>
 
-                        <div class="d-grid">
-                            <button name="login" class="btn btn-primary">
-                                Login
-                            </button>
-                        </div>
+                        <button name="login" class="btn btn-success w-100">
+                            Login
+                        </button>
                     </form>
 
-                        <div class="text-center mt-3">
-                            <a href="../controller/register.php">Belum punya akun? Register</a>
-                        </div>
+                    <div class="text-center mt-3">
+                        <a href="../controller/register.php" class="text-success">
+                            Belum punya akun? Register
+                        </a>
+                    </div>
+
                 </div>
             </div>
 

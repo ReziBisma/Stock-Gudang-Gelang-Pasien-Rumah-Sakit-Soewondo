@@ -24,11 +24,11 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
     
     <!-- HEADER -->
     <div class="bg-success text-white text-center py-4">
-        <h5 class="fw-bold mb-0">SISTEM STOK</h5>
-        <small>Rumah Sakit</small>
+        <h5 class="fw-bold mb-0">SISTEM STOK GELANG </h5>
+        <small>RSUD Soewondo</small>
     </div>
 
-    <!-- MENU -->
+    <!-- MENU --> 
     <div class="p-3 flex-grow-1">
         <ul class="nav nav-pills flex-column gap-2">
 
