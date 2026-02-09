@@ -58,21 +58,30 @@ if (isset($_POST['hapus_stok'])) {
     }
 
     // ================= OPERATOR =================
-    else {
+    $stok_id       = (int) $_POST['hapus_id'];
+    $approve_token = mysqli_real_escape_string($conn, $_POST['approve_token']);
 
-        $token     = $_POST['token'];
-        $stok_id   = (int) $_POST['hapus_id'];
+    // Cek token di tabel otp
+    $q = mysqli_query($conn, "
+        SELECT id 
+        FROM otp 
+        WHERE stok_id = $stok_id AND kode = '$approve_token'
+        LIMIT 1
+    ");
 
-        // Ambil token dari session admin
-        if (!isset($_SESSION['stok_token'][$stok_id]) || $_SESSION['stok_token'][$stok_id] != $token) {
-            $error = "Token salah! Data gagal dihapus.";
-        } else {
-            mysqli_query($conn, "DELETE FROM stok WHERE id = $stok_id");
-            unset($_SESSION['stok_token'][$stok_id]); // hapus token setelah dipakai
-            $success = "Data berhasil dihapus.";
-        }
+
+    if (mysqli_num_rows($q) === 0) {
+        $error = "Token salah atau sudah dipakai! Data gagal dihapus.";
+    } else {
+        // Hapus stok
+        mysqli_query($conn, "DELETE FROM stok WHERE id = $stok_id");
+
+        // Hapus token setelah dipakai
+        $otp = mysqli_fetch_assoc($q);
+        mysqli_query($conn, "DELETE FROM otp WHERE id = {$otp['id']}");
+
+        $success = "Data berhasil dihapus.";
     }
-
 }
 
 

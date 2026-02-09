@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+require_once __DIR__ . '/../config/database.php';
 
 if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'admin') {
     die("Akses ditolak");
@@ -13,11 +14,18 @@ if ($stok_id <= 0) {
     die("Data tidak valid");
 }
 
-// Generate token 6 digit acak
+// Generate token 6 digit
 $token = random_int(100000, 999999);
 
-// Simpan token sementara di session admin
-$_SESSION['stok_token'][$stok_id] = $token;
+// Simpan token di tabel otp
+$expire_minutes = 5; // token berlaku 5 menit
+$expired_at = date('Y-m-d H:i:s', strtotime("+$expire_minutes minutes"));
+
+mysqli_query($conn, "
+    INSERT INTO otp (stok_id, kode, user_id, created_at)
+    VALUES ($stok_id, '$token', '{$_SESSION['user_id']}', NOW())
+");
+
 
 // Tampilkan token
 ?>
