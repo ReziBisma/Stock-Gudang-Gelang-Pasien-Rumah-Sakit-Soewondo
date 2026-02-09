@@ -42,7 +42,7 @@
                     </form>
 
                     <div class="text-center mt-3">
-                        <a href="index.php">Sudah punya akun? Login</a>
+                        <a href="/index.php">Sudah punya akun? Login</a>
                     </div>
 
                 </div>

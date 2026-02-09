@@ -29,7 +29,7 @@ if (isset($_POST['register'])) {
         $_SESSION['username'] = $username;
         $_SESSION['role']     = $role;
 
-        header("Location: dashboard.php");
+        header("Location: /dashboard.php");
         exit;
 
     } else {
