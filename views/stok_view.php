@@ -74,12 +74,50 @@
         </div>
     </div>
 
+
     <!-- EXPORT -->
-    <div class="mb-4">
-        <a href="../auth/export_stok.php" class="btn btn-success" target="_blank">
-            Export CSV
-        </a>
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+        <h5>Export Laporan PDF</h5>
+
+        <form method="get" action="../auth/export_stok.php" target="_blank" class="row g-3">
+
+            <div class="col-md-3">
+                <label>Dari Tanggal</label>
+                <input type="date" name="tgl_awal" class="form-control">
+            </div>
+
+            <div class="col-md-3">
+                <label>Sampai Tanggal</label>
+                <input type="date" name="tgl_akhir" class="form-control">
+            </div>
+
+            <div class="col-md-3">
+                <label>Jenis Gelang</label>
+                <select name="barang" class="form-select">
+                    <option value="">Semua</option>
+                    <?php
+                    $barang = mysqli_query($conn, "SELECT * FROM barang");
+                    while($b = mysqli_fetch_assoc($barang)){
+                        echo "<option value='{$b['id']}'>{$b['nama_barang']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <div class="col-md-3 d-grid">
+                <label>&nbsp;</label>
+                <button class="btn btn-danger">
+                    Export PDF
+                </button>
+            </div>
+
+        </form>
+
     </div>
+</div>
+
 
 
     <!-- TABEL -->
