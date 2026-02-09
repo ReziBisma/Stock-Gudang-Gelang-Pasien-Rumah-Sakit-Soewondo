@@ -42,21 +42,39 @@ if (isset($_POST['simpan'])) {
 }
 
 /* ==============================
-   HAPUS STOK (TANPA RECALCULATE)
+   HAPUS STOK DENGAN VERIFIKASI
 ============================== */
-if (isset($_GET['hapus'])) {
-
+if (isset($_POST['hapus_stok'])) {
     if (!in_array($_SESSION['role'], ['admin', 'operator'])) {
         die("Akses ditolak");
     }
 
-    $id = (int) $_GET['hapus'];
+    $id = (int) $_POST['hapus_id'];
 
-    mysqli_query($conn, "DELETE FROM stok WHERE id = $id");
+    // ================= ADMIN =================
+    if ($_SESSION['role'] === 'admin') {
+        mysqli_query($conn, "DELETE FROM stok WHERE id = $id");
+        $success = "Data berhasil dihapus.";
+    }
 
-    header("Location: stok.php");
-    exit;
+    // ================= OPERATOR =================
+    else {
+
+        $token     = $_POST['token'];
+        $stok_id   = (int) $_POST['hapus_id'];
+
+        // Ambil token dari session admin
+        if (!isset($_SESSION['stok_token'][$stok_id]) || $_SESSION['stok_token'][$stok_id] != $token) {
+            $error = "Token salah! Data gagal dihapus.";
+        } else {
+            mysqli_query($conn, "DELETE FROM stok WHERE id = $stok_id");
+            unset($_SESSION['stok_token'][$stok_id]); // hapus token setelah dipakai
+            $success = "Data berhasil dihapus.";
+        }
+    }
+
 }
+
 
 
 /* ==============================

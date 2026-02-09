@@ -152,34 +152,71 @@
                 $no = $offset + 1;
                 while ($d = mysqli_fetch_assoc($data)):
                 ?>
-                    <tr class="text-center">
-                        <td><?= $no++ ?></td>
-                        <td><?= $d['tanggal'] ?></td>
-                        <td><?= $d['nama_barang'] ?></td>
-                        <td><?= $d['stok_awal'] ?></td>
-                        <td><?= $d['masuk'] ?></td>
-                        <td><?= $d['keluar'] ?></td>
-                        <td><strong><?= $d['stok_akhir'] ?></strong></td>
-                        <td>
-                            <?php if (in_array($_SESSION['role'], ['admin', 'operator'])): ?>
-                                <a href="?hapus=<?= $d['id'] ?>&page=<?= $page ?><?= $params ?>"
-                                class="btn btn-danger btn-sm"
-                                onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                Hapus
-                                </a>
-                            <?php endif; ?>
-                        </td>
+                <tr class="text-center">
+                    <td><?= $no++ ?></td>
+                    <td><?= $d['tanggal'] ?></td>
+                    <td><?= $d['nama_barang'] ?></td>
+                    <td><?= $d['stok_awal'] ?></td>
+                    <td><?= $d['masuk'] ?></td>
+                    <td><?= $d['keluar'] ?></td>
+                    <td><strong><?= $d['stok_akhir'] ?></strong></td>
+                    <td>
+                        <?php if ($_SESSION['role'] === 'admin'): ?>
+                            <form method="post" onsubmit="return confirm('Yakin hapus data ini?')">
+                                <input type="hidden" name="hapus_id" value="<?= $d['id'] ?>">
+                                <button type="submit" name="hapus_stok" class="btn btn-danger btn-sm">
+                                    Hapus
+                                </button>
+                            </form>
+                            <form method="get" action="../auth/stok_generate_token.php" target="_blank" class="mt-1">
+                            <input type="hidden" name="stok_id" value="<?= $d['id'] ?>">
+                            <button type="submit" class="btn btn-warning btn-sm">Generate Token</button>
+                            </form>
 
-                    </tr>
+                        <?php endif; ?>
+
+                        <?php if ($_SESSION['role'] === 'operator'): ?>
+                            <button class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#hapusModal<?= $d['id'] ?>">
+                                Hapus
+                            </button>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+
+                <!-- MODAL UNTUK OPERATOR MINTA APPROVAL ADMIN -->
+                <?php if ($_SESSION['role'] === 'operator'): ?>
+                <div class="modal fade" id="hapusModal<?= $d['id'] ?>" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <form method="post">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Token Approval</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <p class="text-danger">Masukkan token yang diberikan admin</p>
+                                <input type="text" name="approve_token" class="form-control" required>
+                                <input type="hidden" name="hapus_id" value="<?= $d['id'] ?>">
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" name="hapus_stok" class="btn btn-danger">Hapus</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+
+
                 <?php endwhile; ?>
 
-                <?php if ($totalData == 0): ?>
-                    <tr>
-                        <td colspan="8" class="text-center text-muted">
-                            Tidak ada data
-                        </td>
-                    </tr>
-                <?php endif; ?>
+                
                 </tbody>
             </table>
 
@@ -210,6 +247,9 @@
     </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
 
 </body>
 </html>
