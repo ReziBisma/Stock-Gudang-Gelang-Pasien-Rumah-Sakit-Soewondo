@@ -39,7 +39,7 @@ $query = mysqli_query($conn,"
     FROM stok s
     JOIN barang b ON s.barang_id=b.id
     $whereSQL
-    ORDER BY s.tanggal ASC
+    ORDER BY s.tanggal DESC, s.id DESC
 ");
 
 /* ======================
