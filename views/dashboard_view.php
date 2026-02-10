@@ -97,8 +97,10 @@
                 </div>
             </div>
         <?php endif; ?>
+    
+    </div>
 
-        <div class="row mb-4">
+    <div class="row mb-4">
 
             <div class="col-md-4">
                 <div class="card shadow-sm border-start border-primary border-4">
@@ -207,12 +209,6 @@
 
     </div>
 </div>
-
-
-</div>
-
-
-    </div>
 
 </div>
 
