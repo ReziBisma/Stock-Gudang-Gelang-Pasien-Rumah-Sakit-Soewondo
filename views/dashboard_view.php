@@ -174,6 +174,41 @@
         </table>
 
     </div>
+
+    <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+        <h5 class="mb-3">Aktivitas Data Barang</h5>
+
+        <table class="table table-sm table-bordered">
+            <thead class="table-light text-center">
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Barang</th>
+                    <th>Aktivitas</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            <?php while($b = mysqli_fetch_assoc($qBarangAktivitas)): ?>
+                <tr class="text-center">
+                    <td><?= $b['tanggal'] ?></td>
+                    <td><?= $b['nama_barang'] ?></td>
+                    <td>
+                        <span class="badge bg-info">
+                            Barang mulai digunakan
+                        </span>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+
 </div>
 
 

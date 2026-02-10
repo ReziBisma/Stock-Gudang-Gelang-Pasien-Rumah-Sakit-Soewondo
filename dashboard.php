@@ -51,4 +51,18 @@ $qAktivitas = mysqli_query($conn, "
     LIMIT 5
 ");
 
+$qBarangAktivitas = mysqli_query($conn, "
+    SELECT 
+        s.tanggal,
+        b.nama_barang,
+        s.masuk,
+        s.keluar
+    FROM stok s
+    JOIN barang b ON s.barang_id = b.id
+    WHERE s.stok_awal = 0 AND s.masuk > 0
+    ORDER BY s.id DESC
+    LIMIT 5
+");
+
+
 require __DIR__ . '/views/dashboard_view.php';
