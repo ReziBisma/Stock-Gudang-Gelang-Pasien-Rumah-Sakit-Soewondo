@@ -17,7 +17,7 @@
                 <div class="card-body">
 
                     <h4 class="text-center mb-3 fw-bold text-success">
-                        Login Staff RS
+                        Login Staff Soewondo
                     </h4>
 
                     <p class="text-center text-muted mb-4">
