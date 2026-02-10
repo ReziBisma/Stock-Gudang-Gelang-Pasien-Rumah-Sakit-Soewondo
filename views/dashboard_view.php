@@ -100,36 +100,80 @@
 
         <div class="row mb-4">
 
-    <div class="col-md-4">
-        <div class="card shadow-sm border-start border-primary border-4">
-            <div class="card-body">
-                <h6>Total Stok</h6>
-                <h3><?= $totalStok ?></h3>
-                <small class="text-muted">Seluruh barang</small>
+            <div class="col-md-4">
+                <div class="card shadow-sm border-start border-primary border-4">
+                    <div class="card-body">
+                        <h6>Total Stok</h6>
+                        <h3><?= $totalStok ?></h3>
+                        <small class="text-muted">Seluruh barang</small>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="card shadow-sm border-start border-success border-4">
-            <div class="card-body">
-                <h6>Stok Masuk Hari Ini</h6>
-                <h3><?= $totalMasuk ?></h3>
-                <small class="text-muted"><?= date('d M Y') ?></small>
+            <div class="col-md-4">
+                <div class="card shadow-sm border-start border-success border-4">
+                    <div class="card-body">
+                        <h6>Stok Masuk Hari Ini</h6>
+                        <h3><?= $totalMasuk ?></h3>
+                        <small class="text-muted"><?= date('d M Y') ?></small>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="card shadow-sm border-start border-danger border-4">
-            <div class="card-body">
-                <h6>Stok Keluar Hari Ini</h6>
-                <h3><?= $totalKeluar ?></h3>
-                <small class="text-muted"><?= date('d M Y') ?></small>
+            <div class="col-md-4">
+                <div class="card shadow-sm border-start border-danger border-4">
+                    <div class="card-body">
+                        <h6>Stok Keluar Hari Ini</h6>
+                        <h3><?= $totalKeluar ?></h3>
+                        <small class="text-muted"><?= date('d M Y') ?></small>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
+        </div>
+
+        <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+        <h5 class="mb-3">Aktivitas Stok Terbaru</h5>
+
+        <table class="table table-sm table-bordered">
+            <thead class="table-light text-center">
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Barang</th>
+                    <th>Aktivitas</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            <?php while($a = mysqli_fetch_assoc($qAktivitas)): ?>
+                <tr class="text-center">
+
+                    <td><?= $a['tanggal'] ?></td>
+                    <td><?= $a['nama_barang'] ?></td>
+
+                    <td>
+                        <?php if($a['masuk'] > 0): ?>
+                            <span class="text-success">
+                                +<?= $a['masuk'] ?>
+                            </span>
+                        <?php endif; ?>
+
+                        <?php if($a['keluar'] > 0): ?>
+                            <span class="text-danger">
+                                -<?= $a['keluar'] ?>
+                            </span>
+                        <?php endif; ?>
+                    </td>
+
+                </tr>
+            <?php endwhile; ?>
+            </tbody>
+
+        </table>
+
+    </div>
 </div>
 
 

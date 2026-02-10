@@ -43,5 +43,12 @@ $qKeluar = mysqli_query($conn, "
 ");
 $totalKeluar = mysqli_fetch_assoc($qKeluar)['total'] ?? 0;
 
+$qAktivitas = mysqli_query($conn, "
+    SELECT s.tanggal, b.nama_barang, s.masuk, s.keluar
+    FROM stok s
+    JOIN barang b ON s.barang_id = b.id
+    ORDER BY s.id DESC
+    LIMIT 5
+");
 
 require __DIR__ . '/views/dashboard_view.php';
