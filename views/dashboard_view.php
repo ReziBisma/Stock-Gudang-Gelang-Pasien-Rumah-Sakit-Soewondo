@@ -98,6 +98,41 @@
             </div>
         <?php endif; ?>
 
+        <div class="row mb-4">
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-start border-primary border-4">
+            <div class="card-body">
+                <h6>Total Stok</h6>
+                <h3><?= $totalStok ?></h3>
+                <small class="text-muted">Seluruh barang</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-start border-success border-4">
+            <div class="card-body">
+                <h6>Stok Masuk Hari Ini</h6>
+                <h3><?= $totalMasuk ?></h3>
+                <small class="text-muted"><?= date('d M Y') ?></small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-start border-danger border-4">
+            <div class="card-body">
+                <h6>Stok Keluar Hari Ini</h6>
+                <h3><?= $totalKeluar ?></h3>
+                <small class="text-muted"><?= date('d M Y') ?></small>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
     </div>
 
 </div>

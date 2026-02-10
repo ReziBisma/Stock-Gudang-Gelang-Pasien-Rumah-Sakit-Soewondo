@@ -9,4 +9,39 @@ if (!isset($_SESSION['login'])) {
     exit;
 }
 
+/* ==============================
+   DASHBOARD STATISTIK
+============================== */
+
+// total stok terakhir semua barang
+$qTotalStok = mysqli_query($conn, "
+    SELECT SUM(stok_akhir) AS total
+    FROM (
+        SELECT barang_id, MAX(id) id
+        FROM stok
+        GROUP BY barang_id
+    ) last
+    JOIN stok s ON s.id = last.id
+");
+$totalStok = mysqli_fetch_assoc($qTotalStok)['total'] ?? 0;
+
+
+// total stok masuk hari ini
+$qMasuk = mysqli_query($conn, "
+    SELECT SUM(masuk) total
+    FROM stok
+    WHERE tanggal = CURDATE()
+");
+$totalMasuk = mysqli_fetch_assoc($qMasuk)['total'] ?? 0;
+
+
+// total stok keluar hari ini
+$qKeluar = mysqli_query($conn, "
+    SELECT SUM(keluar) total
+    FROM stok
+    WHERE tanggal = CURDATE()
+");
+$totalKeluar = mysqli_fetch_assoc($qKeluar)['total'] ?? 0;
+
+
 require __DIR__ . '/views/dashboard_view.php';
