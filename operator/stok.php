@@ -25,65 +25,77 @@ if (isset($_POST['simpan'])) {
     ");
 
     $d = mysqli_fetch_assoc($q);
-    $stok_awal = $d ? $d['stok_akhir'] : 0;
+    $stok_awal  = $d ? $d['stok_akhir'] : 0;
     $stok_akhir = $stok_awal + $masuk - $keluar;
 
     if ($stok_akhir < 0) {
+
         $error = "Stok tidak boleh minus!";
+
     } else {
+
         mysqli_query($conn, "
             INSERT INTO stok
             (tanggal, barang_id, stok_awal, masuk, keluar, stok_akhir, user_id)
             VALUES
             (CURDATE(), '$barang_id', '$stok_awal', '$masuk', '$keluar', '$stok_akhir', '{$_SESSION['user_id']}')
         ");
+
         $success = "Data stok berhasil disimpan";
     }
 }
 
+
 /* ==============================
-   HAPUS STOK DENGAN VERIFIKASI
+   HAPUS STOK (ADMIN / OPERATOR)
 ============================== */
 if (isset($_POST['hapus_stok'])) {
+
     if (!in_array($_SESSION['role'], ['admin', 'operator'])) {
         die("Akses ditolak");
     }
 
-    $id = (int) $_POST['hapus_id'];
+    $stok_id = (int) $_POST['hapus_id'];
 
-    // ================= ADMIN =================
+    // ========= ADMIN =========
     if ($_SESSION['role'] === 'admin') {
-        mysqli_query($conn, "DELETE FROM stok WHERE id = $id");
-        $success = "Data berhasil dihapus.";
-    }
 
-    // ================= OPERATOR =================
-    $stok_id       = (int) $_POST['hapus_id'];
-    $approve_token = mysqli_real_escape_string($conn, $_POST['approve_token']);
-
-    // Cek token di tabel otp
-    $q = mysqli_query($conn, "
-        SELECT id 
-        FROM otp 
-        WHERE stok_id = $stok_id AND kode = '$approve_token'
-        LIMIT 1
-    ");
-
-
-    if (mysqli_num_rows($q) === 0) {
-        $error = "Token salah atau sudah dipakai! Data gagal dihapus.";
-    } else {
-        // Hapus stok
         mysqli_query($conn, "DELETE FROM stok WHERE id = $stok_id");
 
-        // Hapus token setelah dipakai
-        $otp = mysqli_fetch_assoc($q);
-        mysqli_query($conn, "DELETE FROM otp WHERE id = {$otp['id']}");
-
         $success = "Data berhasil dihapus.";
     }
-}
 
+    // ========= OPERATOR =========
+    elseif ($_SESSION['role'] === 'operator') {
+
+        $approve_token = mysqli_real_escape_string(
+            $conn,
+            $_POST['approve_token'] ?? ''
+        );
+
+        $q = mysqli_query($conn, "
+            SELECT id 
+            FROM otp 
+            WHERE stok_id = $stok_id 
+            AND kode = '$approve_token'
+            LIMIT 1
+        ");
+
+        if (mysqli_num_rows($q) === 0) {
+
+            $error = "Token salah atau sudah dipakai!";
+
+        } else {
+
+            mysqli_query($conn, "DELETE FROM stok WHERE id = $stok_id");
+
+            $otp = mysqli_fetch_assoc($q);
+            mysqli_query($conn, "DELETE FROM otp WHERE id = {$otp['id']}");
+
+            $success = "Data berhasil dihapus.";
+        }
+    }
+}
 
 
 /* ==============================
@@ -93,30 +105,31 @@ $where = "";
 $params = "";
 
 if (!empty($_GET['tanggal'])) {
+
     $tgl = mysqli_real_escape_string($conn, $_GET['tanggal']);
     $where = "WHERE s.tanggal = '$tgl'";
     $params = "&tanggal=$tgl";
 }
 
+
 /* ==============================
-   PAGINATION (FIXED)
+   PAGINATION
 ============================== */
 $limit  = 10;
 $page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $page   = ($page < 1) ? 1 : $page;
 $offset = ($page - 1) * $limit;
 
-/* TOTAL DATA STOK (PAKE WHERE) */
 $totalQuery = mysqli_query($conn, "
     SELECT COUNT(*) AS total
     FROM stok s
     $where
 ");
+
 $totalRow  = mysqli_fetch_assoc($totalQuery);
 $totalData = $totalRow['total'];
 $totalPage = ceil($totalData / $limit);
 
-/* DATA STOK PER HALAMAN */
 $data = mysqli_query($conn, "
     SELECT s.*, b.nama_barang
     FROM stok s
@@ -125,5 +138,6 @@ $data = mysqli_query($conn, "
     ORDER BY s.id DESC
     LIMIT $limit OFFSET $offset
 ");
+
 
 require __DIR__ . '/../views/stok_view.php';

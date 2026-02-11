@@ -9,9 +9,6 @@ if (!isset($_SESSION['login'])) {
     exit;
 }
 
-/* ==============================
-   DASHBOARD STATISTIK
-============================== */
 
 // total stok terakhir semua barang
 $qTotalStok = mysqli_query($conn, "
