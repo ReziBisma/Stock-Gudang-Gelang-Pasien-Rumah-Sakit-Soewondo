@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once __DIR__ . '/../config/database.php';
+require __DIR__ . '/../vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if (!isset($_SESSION['login'])) {
     header("Location: ../index.php");
@@ -44,6 +46,67 @@ if (isset($_POST['simpan'])) {
         $success = "Data stok berhasil disimpan";
     }
 }
+
+/* ==============================
+   IMPORT EXCEL (PAKAI NAMA BARANG)
+============================== */
+if (isset($_POST['import_excel']) && $_SESSION['role'] === 'admin') {
+
+    if (!empty($_FILES['excel']['tmp_name'])) {
+
+        $spreadsheet = IOFactory::load($_FILES['excel']['tmp_name']);
+        $rows = $spreadsheet->getActiveSheet()->toArray();
+
+        unset($rows[0]); // hapus header
+
+        foreach ($rows as $row) {
+
+            $tanggal      = mysqli_real_escape_string($conn, $row[0]);
+            $nama_barang  = mysqli_real_escape_string($conn, $row[1]);
+            $masuk        = (int)$row[2];
+            $keluar       = (int)$row[3];
+
+            // cari barang_id dari nama
+            $barangQ = mysqli_query($conn, "
+                SELECT id FROM barang
+                WHERE nama_barang = '$nama_barang'
+                LIMIT 1
+            ");
+
+            if (mysqli_num_rows($barangQ) === 0) {
+                continue; // skip jika barang tidak ditemukan
+            }
+
+            $barang = mysqli_fetch_assoc($barangQ);
+            $barang_id = $barang['id'];
+
+            // ambil stok terakhir
+            $q = mysqli_query($conn, "
+                SELECT stok_akhir 
+                FROM stok 
+                WHERE barang_id='$barang_id'
+                ORDER BY id DESC
+                LIMIT 1
+            ");
+
+            $d = mysqli_fetch_assoc($q);
+            $stok_awal  = $d ? $d['stok_akhir'] : 0;
+            $stok_akhir = $stok_awal + $masuk - $keluar;
+
+            if ($stok_akhir < 0) continue;
+
+            mysqli_query($conn, "
+                INSERT INTO stok
+                (tanggal, barang_id, stok_awal, masuk, keluar, stok_akhir, user_id)
+                VALUES
+                ('$tanggal', '$barang_id', '$stok_awal', '$masuk', '$keluar', '$stok_akhir', '{$_SESSION['user_id']}')
+            ");
+        }
+
+        $success = "Import Excel berhasil (pakai nama barang)!";
+    }
+}
+
 
 
 /* ==============================

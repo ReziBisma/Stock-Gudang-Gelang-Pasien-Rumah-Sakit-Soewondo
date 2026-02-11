@@ -115,10 +115,24 @@
 
         </form>
 
+            <h5>Import Excel Stok</h5>
+
+            <form method="post" enctype="multipart/form-data" class="row g-2">
+
+                <div class="col-md-9">
+                    <input type="file" name="excel" class="form-control" required>
+                </div>
+
+                <div class="col-md-3 d-grid">
+                    <button name="import_excel" class="btn btn-success">
+                        Import Excel
+                    </button>
+                </div>
+
+            </form>
+
     </div>
 </div>
-
-
 
     <!-- TABEL -->
     <div class="card shadow-sm">
