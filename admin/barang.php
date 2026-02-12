@@ -1,10 +1,6 @@
 <?php
 session_start();
 
-/* DEBUG (hapus kalau sudah normal) */
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
-
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -20,10 +16,13 @@ include __DIR__ . '/../partials/sidebar.php';
    TAMBAH BARANG
 ===================== */
 if (isset($_POST['tambah'])) {
+
     $nama = mysqli_real_escape_string($conn, $_POST['nama']);
-    if ($nama) {
+
+    if (!empty($nama)) {
         mysqli_query($conn, "INSERT INTO barang (nama_barang) VALUES ('$nama')");
-        $tambah_success = "Barang '$nama' berhasil ditambahkan!";
+        header("Location: barang.php?msg=tambah");
+        exit;
     }
 }
 
@@ -31,54 +30,70 @@ if (isset($_POST['tambah'])) {
    UPDATE BARANG
 ===================== */
 if (isset($_POST['update'])) {
+
     $id   = (int) $_POST['id'];
     $nama = mysqli_real_escape_string($conn, $_POST['nama']);
 
-    if ($nama) {
-        mysqli_query($conn, "UPDATE barang SET nama_barang='$nama' WHERE id='$id'");
-        $update_success = "Barang berhasil diperbarui!";
+    if (!empty($nama)) {
+        mysqli_query($conn, "UPDATE barang SET nama_barang='$nama' WHERE id=$id");
+        header("Location: barang.php?msg=update");
+        exit;
     }
 }
 
 /* =====================
-   HAPUS BARANG
+   HAPUS BARANG (Single)
 ===================== */
 if (isset($_GET['hapus'])) {
+
     $id = (int) $_GET['hapus'];
-    mysqli_query($conn, "DELETE FROM barang WHERE id='$id'");
-    $hapus_success = "Barang berhasil dihapus!";
+    mysqli_query($conn, "DELETE FROM barang WHERE id=$id");
+
+    header("Location: barang.php?msg=hapus");
+    exit;
 }
 
 /* =====================
    BULK DELETE
 ===================== */
-if (isset($_POST['hapus_massal']) && !empty($_POST['hapus_ids'])) {
+if (isset($_POST['hapus_massal'])) {
 
-    $ids = array_map('intval', $_POST['hapus_ids']);
-    $idList = implode(',', $ids);
+    if (!empty($_POST['hapus_ids'])) {
 
-    mysqli_query($conn, "DELETE FROM barang WHERE id IN ($idList)");
+        $ids = array_map('intval', $_POST['hapus_ids']);
+        $idList = implode(',', $ids);
 
-    $hapus_success = "Data terpilih berhasil dihapus!";
+        if (!empty($idList)) {
+            mysqli_query($conn, "DELETE FROM barang WHERE id IN ($idList)");
+        }
+
+        header("Location: barang.php?msg=hapus_massal");
+        exit;
+
+    } else {
+        header("Location: barang.php?msg=kosong");
+        exit;
+    }
 }
 
 /* =====================
-   IMPORT BARANG TANPA MENGHAPUS DATA LAMA
+   IMPORT BARANG
 ===================== */
 if (isset($_POST['import']) && isset($_FILES['file']) && $_FILES['file']['error'] === 0) {
 
     $allowed = ['xlsx', 'xls', 'csv'];
-    $fileName = $_FILES['file']['name'];
-    $fileTmp  = $_FILES['file']['tmp_name'];
-    $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+    $ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
 
     if (!in_array($ext, $allowed)) {
-        $import_error = "Format file tidak didukung!";
+
+        header("Location: barang.php?msg=format_salah");
+        exit;
+
     } else {
 
         try {
 
-            $spreadsheet = IOFactory::load($fileTmp);
+            $spreadsheet = IOFactory::load($_FILES['file']['tmp_name']);
             $sheet = $spreadsheet->getActiveSheet();
             $rows = $sheet->toArray();
 
@@ -86,7 +101,7 @@ if (isset($_POST['import']) && isset($_FILES['file']) && $_FILES['file']['error'
 
             foreach ($rows as $index => $row) {
 
-                if ($index == 0) continue; // skip header
+                if ($index == 0) continue;
 
                 $nama = trim($row[0] ?? '');
 
@@ -98,12 +113,14 @@ if (isset($_POST['import']) && isset($_FILES['file']) && $_FILES['file']['error'
 
             mysqli_commit($conn);
 
-            $import_success = "Data berhasil diimport dan ditambahkan ke data lama!";
+            header("Location: barang.php?msg=import");
+            exit;
 
         } catch (Exception $e) {
 
             mysqli_rollback($conn);
-            $import_error = "Terjadi kesalahan saat import: " . $e->getMessage();
+            header("Location: barang.php?msg=import_error");
+            exit;
         }
     }
 }
@@ -146,7 +163,4 @@ $data = mysqli_query(
      LIMIT $limit OFFSET $offset"
 );
 
-/* =====================
-   LOAD VIEW
-===================== */
 require __DIR__ . '/../views/barang_view.php';
