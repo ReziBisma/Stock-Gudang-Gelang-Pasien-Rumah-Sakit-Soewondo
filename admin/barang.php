@@ -1,6 +1,14 @@
 <?php
 session_start();
+
+/* DEBUG (hapus kalau sudah normal) */
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'admin') {
     die("Akses ditolak");
@@ -41,7 +49,9 @@ if (isset($_GET['hapus'])) {
     $hapus_success = "Barang berhasil dihapus!";
 }
 
-/* ===== BULK DELETE ===== */
+/* =====================
+   BULK DELETE
+===================== */
 if (isset($_POST['hapus_massal']) && !empty($_POST['hapus_ids'])) {
 
     $ids = array_map('intval', $_POST['hapus_ids']);
@@ -50,6 +60,52 @@ if (isset($_POST['hapus_massal']) && !empty($_POST['hapus_ids'])) {
     mysqli_query($conn, "DELETE FROM barang WHERE id IN ($idList)");
 
     $hapus_success = "Data terpilih berhasil dihapus!";
+}
+
+/* =====================
+   IMPORT BARANG TANPA MENGHAPUS DATA LAMA
+===================== */
+if (isset($_POST['import']) && isset($_FILES['file']) && $_FILES['file']['error'] === 0) {
+
+    $allowed = ['xlsx', 'xls', 'csv'];
+    $fileName = $_FILES['file']['name'];
+    $fileTmp  = $_FILES['file']['tmp_name'];
+    $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+    if (!in_array($ext, $allowed)) {
+        $import_error = "Format file tidak didukung!";
+    } else {
+
+        try {
+
+            $spreadsheet = IOFactory::load($fileTmp);
+            $sheet = $spreadsheet->getActiveSheet();
+            $rows = $sheet->toArray();
+
+            mysqli_begin_transaction($conn);
+
+            foreach ($rows as $index => $row) {
+
+                if ($index == 0) continue; // skip header
+
+                $nama = trim($row[0] ?? '');
+
+                if (!empty($nama)) {
+                    $nama = mysqli_real_escape_string($conn, $nama);
+                    mysqli_query($conn, "INSERT INTO barang (nama_barang) VALUES ('$nama')");
+                }
+            }
+
+            mysqli_commit($conn);
+
+            $import_success = "Data berhasil diimport dan ditambahkan ke data lama!";
+
+        } catch (Exception $e) {
+
+            mysqli_rollback($conn);
+            $import_error = "Terjadi kesalahan saat import: " . $e->getMessage();
+        }
+    }
 }
 
 /* =====================
@@ -63,8 +119,9 @@ if (isset($_GET['search']) && $_GET['search'] !== '') {
     $where  = "WHERE nama_barang LIKE '%$search%'";
 }
 
-
-/* PAGINATION */
+/* =====================
+   PAGINATION
+===================== */
 $limit = 10;
 $page  = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $page  = ($page < 1) ? 1 : $page;
@@ -88,9 +145,6 @@ $data = mysqli_query(
      ORDER BY id ASC
      LIMIT $limit OFFSET $offset"
 );
-
-
-$params = '';
 
 /* =====================
    LOAD VIEW

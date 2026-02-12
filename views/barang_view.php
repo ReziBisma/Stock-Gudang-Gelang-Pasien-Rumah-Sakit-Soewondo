@@ -66,17 +66,45 @@
         </div>
     </div>
 
-    <!-- ===================== -->
-    <!-- EXPORT -->
-    <!-- ===================== -->
+   <!-- ===================== -->
+<!-- IMPORT & EXPORT -->
+<!-- ===================== -->
 
-    <div class="mb-4 d-flex gap-2">
-        <a href="../auth/export_barang.php?format=pdf"
-            class="btn btn-danger"
-            target="_blank">
-            Export PDF
-        </a>
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <!-- IMPORT -->
+            <form method="post"
+                  enctype="multipart/form-data"
+                  class="d-flex align-items-center gap-2">
+
+                <input type="file"
+                       name="file"
+                       class="form-control form-control-sm"
+                       style="max-width: 220px;"
+                       required>
+
+                <button name="import"
+                        class="btn btn-success btn-sm">
+                    <i class="bi bi-upload"></i> Import
+                </button>
+
+            </form>
+
+            <!-- EXPORT -->
+            <a href="../auth/export_barang.php?format=pdf"
+               class="btn btn-danger btn-sm"
+               target="_blank">
+                <i class="bi bi-file-earmark-pdf"></i> Export PDF
+            </a>
+
+        </div>
+
     </div>
+</div>
+
 
 
     <!-- ===================== -->
