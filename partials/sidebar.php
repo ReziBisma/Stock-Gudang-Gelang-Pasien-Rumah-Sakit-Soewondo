@@ -36,7 +36,7 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
             <li class="nav-item">
                 <a href="/dashboard.php"
                    class="nav-link <?= ($current_page == 'dashboard.php') ? 'active' : '' ?>">
-                    🏠 Dashboard
+                    <i class="bi bi-house-door me-2"></i> Dashboard
                 </a>
             </li>
 
@@ -45,7 +45,7 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
             <li class="nav-item">
                 <a href="/operator/stok.php"
                    class="nav-link <?= ($current_page == 'stok.php') ? 'active' : '' ?>">
-                    📦 Manajemen Stok
+                    <i class="bi bi-box-seam me-2"></i> Manajemen Stok
                 </a>
             </li>
             <?php endif; ?>
@@ -55,14 +55,14 @@ $isOperator = ($_SESSION['role'] ?? '') === 'operator';
             <li class="nav-item">
                 <a href="/admin/barang.php"
                    class="nav-link <?= ($current_page == 'barang.php') ? 'active' : '' ?>">
-                    🧾 Data Barang
+                    <i class="bi bi-tags me-2"></i> Data Barang
                 </a>
             </li>
 
             <li class="nav-item">
                 <a href="/admin/users.php"
                    class="nav-link <?= ($current_page == 'users.php') ? 'active' : '' ?>">
-                    👤 Data User
+                    <i class="bi bi-people me-2"></i> Data User
                 </a>
             </li>
             <?php endif; ?>
