@@ -183,10 +183,10 @@
                                     Hapus
                                 </button>
                             </form>
-                            <form method="get" action="../auth/stok_generate_token.php" target="_blank" class="mt-1">
-                            <input type="hidden" name="stok_id" value="<?= $d['id'] ?>">
-                            <button type="submit" class="btn btn-warning btn-sm">Generate Token</button>
-                            </form>
+                            <button class="btn btn-warning btn-sm mt-1 generate-token-btn"
+                                    data-id="<?= $d['id'] ?>">
+                                Generate Token
+                            </button>
 
                         <?php endif; ?>
 
@@ -261,10 +261,105 @@
         </div>
     </div>
 
+        <!-- MODAL GENERATE TOKEN -->
+    <div class="modal fade" id="tokenModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Token Approval</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+            <div class="modal-body text-center">
+
+                <div class="input-group justify-content-center"
+                    style="max-width:300px; margin:auto;">
+
+                    <input type="text"
+                        id="tokenInput"
+                        class="form-control text-center fw-bold"
+                        readonly>
+
+                    <button class="btn btn-outline-secondary"
+                            type="button"
+                            onclick="copyToken()">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                </div>
+
+                <small id="copyMessage"
+                    class="text-success d-none mt-2 d-block">
+                    Token berhasil disalin ✔
+                </small>
+
+            </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">
+                        Tutup
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+        document.querySelectorAll(".generate-token-btn").forEach(button => {
+            button.addEventListener("click", function() {
 
+                let stokId = this.dataset.id;
+
+                fetch("../auth/stok_generate_token.php?stok_id=" + stokId)
+                    .then(response => response.json())
+                    .then(data => {
+
+                        if (data.status === 'success') {
+
+                        document.getElementById("tokenInput").value = data.token;
+                        document.getElementById("copyMessage").classList.add("d-none");
+
+                        } else {
+
+                        document.getElementById("tokenInput").value = "";
+                        alert(data.message);
+
+                        }
+
+                        let modal = new bootstrap.Modal(
+                            document.getElementById('tokenModal')
+                        );
+                        modal.show();
+                    })
+                    .catch(error => {
+                        document.getElementById("tokenResult").innerHTML =
+                            "<p class='text-danger'>Terjadi kesalahan server</p>";
+                    });
+
+            });
+        });
+
+        function copyToken() {
+
+            let input = document.getElementById("tokenInput");
+
+            input.select();
+            input.setSelectionRange(0, 99999);
+
+            navigator.clipboard.writeText(input.value);
+
+            let msg = document.getElementById("copyMessage");
+            msg.classList.remove("d-none");
+
+            setTimeout(() => {
+                msg.classList.add("d-none");
+            }, 2000);
+        }
+</script>
 
 </body>
 </html>
