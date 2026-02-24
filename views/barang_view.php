@@ -160,7 +160,7 @@
 
                     <?php
                     $rows = [];
-                    $no = 1;
+                    $no = $offset + 1;
 
                     while ($d = mysqli_fetch_assoc($data)):
                         $rows[] = $d;
